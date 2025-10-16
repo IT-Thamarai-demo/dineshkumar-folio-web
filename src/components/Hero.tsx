@@ -69,9 +69,16 @@ const Hero = () => {
         </div>
         
         <div className="flex justify-center mt-16 animate-bounce">
-          <a href="#about" className="text-primary">
+          <button 
+            onClick={() => {
+              const aboutSection = document.getElementById('about');
+              aboutSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            className="text-primary hover:text-accent transition-colors cursor-pointer"
+            aria-label="Scroll to about section"
+          >
             <ArrowDown className="w-8 h-8" />
-          </a>
+          </button>
         </div>
       </div>
     </section>

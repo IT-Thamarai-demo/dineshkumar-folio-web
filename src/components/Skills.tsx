@@ -1,6 +1,8 @@
 import { Code2, Database, Layout, Wrench } from "lucide-react";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const Skills = () => {
+  const { ref, isVisible } = useIntersectionObserver();
   const skillCategories = [
     {
       icon: Layout,
@@ -29,8 +31,10 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" className="py-20 px-4">
-      <div className="container mx-auto">
+    <section id="skills" className="py-20 px-4" ref={ref}>
+      <div className={`container mx-auto transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}>
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Skills & Technologies</h2>
           <div className="w-20 h-1 hero-gradient mx-auto"></div>

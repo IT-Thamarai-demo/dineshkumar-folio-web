@@ -1,6 +1,8 @@
 import { Award, Target, Zap, Clock } from "lucide-react";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const About = () => {
+  const { ref, isVisible } = useIntersectionObserver();
   const strengths = [
     { icon: Zap, title: "Quick Learner", description: "Rapidly adapts to new technologies and frameworks" },
     { icon: Target, title: "Problem Solver", description: "Strong analytical and problem-solving abilities" },
@@ -9,8 +11,10 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-20 px-4 bg-secondary/30">
-      <div className="container mx-auto">
+    <section id="about" className="py-20 px-4 bg-secondary/30" ref={ref}>
+      <div className={`container mx-auto transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}>
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">About Me</h2>
           <div className="w-20 h-1 hero-gradient mx-auto"></div>

@@ -1,6 +1,8 @@
 import { GraduationCap, Award } from "lucide-react";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const Education = () => {
+  const { ref, isVisible } = useIntersectionObserver();
   const certifications = [
     "Python Full Stack Developer Certification",
     "SQL and Database Management Course",
@@ -8,8 +10,10 @@ const Education = () => {
   ];
 
   return (
-    <section id="education" className="py-20 px-4">
-      <div className="container mx-auto max-w-4xl">
+    <section id="education" className="py-20 px-4" ref={ref}>
+      <div className={`container mx-auto max-w-4xl transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}>
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Education & Certifications</h2>
           <div className="w-20 h-1 hero-gradient mx-auto"></div>

@@ -2,25 +2,44 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, Linkedin, Github } from "lucide-react";
+import { Mail, Phone, Linkedin, Github, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const Contact = () => {
   const { toast } = useToast();
+  const { ref, isVisible } = useIntersectionObserver();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for reaching out. I'll get back to you soon!",
-    });
-    setFormData({ name: "", email: "", subject: "", message: "" });
+    setIsSubmitting(true);
+
+    // Create mailto link with form data
+    const mailtoLink = `mailto:dineshkumarvd03@gmail.com?subject=${encodeURIComponent(
+      formData.subject
+    )}&body=${encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    )}`;
+
+    // Open default email client
+    window.location.href = mailtoLink;
+
+    // Show success toast
+    setTimeout(() => {
+      toast({
+        title: "Email Client Opened!",
+        description: "Your default email client has been opened with the message ready to send.",
+      });
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setIsSubmitting(false);
+    }, 500);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -31,8 +50,10 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 px-4 bg-secondary/30">
-      <div className="container mx-auto max-w-5xl">
+    <section id="contact" className="py-20 px-4 bg-secondary/30" ref={ref}>
+      <div className={`container mx-auto max-w-5xl transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}>
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Get In Touch</h2>
           <div className="w-20 h-1 hero-gradient mx-auto mb-4"></div>
@@ -140,9 +161,20 @@ const Contact = () => {
             <Button 
               type="submit" 
               size="lg" 
-              className="w-full hero-gradient text-white hover:opacity-90"
+              className="w-full hero-gradient text-white hover:opacity-90 transition-all"
+              disabled={isSubmitting}
             >
-              Send Message
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Opening Email...
+                </>
+              ) : (
+                <>
+                  <Send className="w-5 h-5 mr-2" />
+                  Send Message
+                </>
+              )}
             </Button>
           </form>
         </div>

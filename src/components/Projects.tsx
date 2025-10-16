@@ -1,7 +1,9 @@
 import { ExternalLink, Github } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const Projects = () => {
+  const { ref, isVisible } = useIntersectionObserver();
   const projects = [
     {
       title: "Login and Registration System",
@@ -21,8 +23,10 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" className="py-20 px-4 bg-secondary/30">
-      <div className="container mx-auto">
+    <section id="projects" className="py-20 px-4 bg-secondary/30" ref={ref}>
+      <div className={`container mx-auto transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+      }`}>
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Featured Projects</h2>
           <div className="w-20 h-1 hero-gradient mx-auto"></div>
